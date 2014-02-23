@@ -10,14 +10,9 @@ get '/webhook_url' do
   params[:venmo_challenge].to_s
 end
 
-get '/' do
-  'hi'
-end
-
 post '/' do
   @json = JSON.parse request.body.read
-  note = @json['data']['note'].downcase
-  puts note
+  note = parse_note @json['data']['note'].downcase
   `./control.sh #{note}`
   
   200
@@ -30,6 +25,7 @@ post '/email' do
     @subject = v if k == "subject" 
     @text = v if k == "text"
   end
+  @subject = parse_note @subject.downcase
   puts @subject
   `./control.sh #{@subject}`
   
@@ -39,13 +35,30 @@ end
 
 
 # OLD STUFF
-=begin
-get '/:button' do
-  dothing params[:button]
-end
 
-def dothing x
-  `./control.sh #{x}`
-end
 
-=end
+# parse venmo input into single button press
+def parse_note note
+  note.chomp!
+  note.strip!
+  if note.include? "start"
+    return "start"
+  elsif note.include? "left"
+    return "left"
+  elsif note.include? "down"
+    return "down"
+  elsif note.include? "right"
+    return "right"
+  elsif note.include? "up"
+    return "up"
+  elsif note=='b' 
+    return "b"
+  elsif note=='a'
+    return "a"
+  else
+    nil
+    
+  end
+
+end
+  
