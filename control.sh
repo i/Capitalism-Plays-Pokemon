@@ -6,6 +6,9 @@ fi
 if [ "$(whoami)" == 'ian' ]; then
     WID=`xdotool search --name "VisualBoyAdvance" | head -1`
 fi
+if [ "$(whoami)" == 'root' ]; then
+    WID=`xdotool search --name "VisualBoyAdvance" | head -1`
+fi
 
 function goDown {
     xdotool windowactivate $WID
