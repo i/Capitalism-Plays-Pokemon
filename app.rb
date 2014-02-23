@@ -4,6 +4,8 @@ require 'sinatra/reloader'
 require 'cgi'
 require 'pp'
 
+set :bind, '0.0.0.0'
+
 # Used when setting URL on Venmo
 # https://venmo.com/account/settings/developers
 get '/webhook_url' do
@@ -16,6 +18,10 @@ post '/' do
   `./control.sh #{note}`
   
   200
+end
+
+get '/' do
+  'hi'
 end
 
 post '/email' do
@@ -76,10 +82,8 @@ def parse_note note
     return "b"
   elsif note=='a'
     return "a"
-  else
-    nil
-    
   end
 
+  nil
 end
   
