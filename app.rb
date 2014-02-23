@@ -33,6 +33,27 @@ post '/email' do
 end
 
 
+post '/level' do
+  request.POST.each do |k,v| 
+    #puts "#{k}, #{v}" if k == "attachment1"
+    if k == "attachment1" 
+      puts "#{v[:filename]}"
+      file = v[:tempfile]
+      filePath = File.readlink("/proc/self/fd/#{file.fileno}")
+      # overwrite if necessary
+      `rm #{v[:filename]}`
+      `mv #{filePath} #{v[:filename]}`
+      `./runPortal.sh #{v[:filename]}`
+    end
+  end
+  
+  200
+end
+
+
+
+
+
 
 # OLD STUFF
 
